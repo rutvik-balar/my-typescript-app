@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { API } from '../../services/Api';
-import { FormData,AddDataProps } from './interface';
+import { FormData, AddDataProps } from './interface';
+import Validation from '../../utils/Validation';
 
 
 function AddData({ name }: AddDataProps) {
@@ -41,34 +42,7 @@ function AddData({ name }: AddDataProps) {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Perform validation here
-        let formIsValid = true;
-        const newErrors = {
-            name: '',
-            email: '',
-            jobTitle: '',
-        };
-
-        // Name validation (required)
-        if (!formData.name?.trim()) {
-            formIsValid = false;
-            newErrors.name = 'Name is required';
-        }
-
-        // Email validation (required and format)
-        if (!formData.email?.trim()) {
-            formIsValid = false;
-            newErrors.email = 'Email is required';
-        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email || '')) {
-            formIsValid = false;
-            newErrors.email = 'Invalid email address';
-        }
-
-        // Job Title validation (required)
-        if (!formData.jobTitle?.trim()) {
-            formIsValid = false;
-            newErrors.jobTitle = 'Job Title is required';
-        }
+        let [formIsValid , newErrors] = Validation(formData);
 
         if (formIsValid) {
             if (name === 'Edit') {
